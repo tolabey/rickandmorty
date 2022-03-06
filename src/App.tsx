@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useEffect } from "react";
+
+import { useAppDispatch, useAppSelector } from "redux/hooks";
+
+import { fetchCharacters } from "redux/slices/charactersSlice";
 
 function App() {
-  return (
-    <div className="App">
+  const dispatch = useAppDispatch();
 
-    </div>
-  );
+  useEffect(() => {
+    console.log("aaa");
+    dispatch(fetchCharacters());
+  }, []);
+  return <div className="App">aa</div>;
 }
 
 export default App;
