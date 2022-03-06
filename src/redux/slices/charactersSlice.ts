@@ -1,12 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchRickAndMortyCharacters } from "../apis/rickAndMortyApi";
+import { generateRickAndMortyUrl } from "redux/apis/apiUtil";
+import { fetchGet } from "../apis/fetchApi";
 import * as ActionKeys from "../constants/actionKeys";
 
 export const fetchCharacters = createAsyncThunk(
   ActionKeys.fetchCharacters,
-  async () => {
-    console.log("aa", 222);
-    const response = await fetchRickAndMortyCharacters();
+  async (pageNumber: number) => {
+    const url = generateRickAndMortyUrl(pageNumber);
+
+    const response = await fetchGet(url);
 
     return response;
   }
@@ -14,28 +16,29 @@ export const fetchCharacters = createAsyncThunk(
 
 // Define the initial state using that type
 const initialState: {
-  characters?: any[];
+  characters?: any;
+  fetchUrl: string;
+  activePage: number;
 } = {
-  characters: [],
+  fetchUrl: "https://rickandmortyapi.com/api/character?page=1",
+  activePage: 1,
 };
 
 export const charactersSlice = createSlice({
   name: "characters",
   initialState,
   reducers: {
-    approveAnImage: (state, action) => {},
+    setActivePage: (state, action) => {
+      state.activePage = action.payload;
+    },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchCharacters.pending, (state) => {
-        delete state.characters;
-      })
-      .addCase(fetchCharacters.fulfilled, (state, action) => {
-        state.characters = action.payload;
-      });
+    builder.addCase(fetchCharacters.fulfilled, (state, action) => {
+      state.characters = action.payload;
+    });
   },
 });
 
-export const {} = charactersSlice.actions;
+export const { setActivePage } = charactersSlice.actions;
 
 export default charactersSlice.reducer;
