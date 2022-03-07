@@ -1,0 +1,11 @@
+.character-card {
+  width: 300px;
+  padding: 10px;
+}
+
+.info-wrapper {
+  display: flex;
+  .info__label {
+    margin-right: 4px;
+  }
+}
